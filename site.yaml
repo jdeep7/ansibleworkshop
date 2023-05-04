@@ -1,0 +1,66 @@
+- hosts: webservers
+  tasks:
+  - name: updating apt
+    become: yes
+    apt:
+       update_cache: yes
+
+  - name: installing pip
+    become: yes
+    apt:
+      name: python3-pip
+
+  - name: installing flask
+    become: yes
+    pip:
+       name: flask
+
+  - name: installing gunicorn
+    become: yes
+    pip:
+      name: gunicorn
+
+  - name: Removing any redundent file with same name
+    file:
+      state: absent
+      path: /home/ubuntu/app2.py
+
+  - name: copy application2.py from localhost to servers
+    copy:
+     src: ./application2.py
+     dest: ~/app.py
+
+  - name: Copying gunicorn cofiguration script
+    copy:
+     src: ./gunicorn.sh
+     dest: ~/gunicorn.sh
+
+  - name: Change PWD to another path
+    become: yes
+    shell: bash /home/ubuntu/gunirun.sh
+
+
+
+- hosts: HAproxy
+  tasks:
+  - name: apt-update cache
+    become: yes
+    apt:
+       update_cache: yes
+
+  - name: Installing HAProxy
+    become: yes
+    apt:
+      name: haproxy
+
+  - name: copy HAproxy config file from source to dest server
+    become: yes
+    template:
+     src: ./HAproxy
+     dest: /etc/haproxy/haproxy.cfg
+
+  - name: haproxy restart
+    become: yes
+    ansible.builtin.service:
+     name: haproxy
+     state: restarted
