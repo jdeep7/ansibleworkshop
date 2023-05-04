@@ -37,7 +37,7 @@
 
   - name: Change PWD to another path
     become: yes
-    shell: bash /home/ubuntu/gunirun.sh
+    shell: bash /home/ubuntu/gunicorn.sh
 
 
 
