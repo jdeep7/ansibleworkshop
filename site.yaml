@@ -1,3 +1,4 @@
+# for dev server group
 - hosts: webservers
   tasks:
   - name: updating apt
@@ -40,7 +41,7 @@
     shell: bash /home/ubuntu/gunicorn.sh
 
 
-
+# for HAproxy load balacer
 - hosts: HAproxy
   tasks:
   - name: apt-update cache
